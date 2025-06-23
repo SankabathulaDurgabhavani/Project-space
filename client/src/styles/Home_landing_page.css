@@ -1,0 +1,123 @@
+/* General HomePage Styling */
+.homepage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #FFFFFF, #d2bff5); /* Gradient Background */
+  padding: 10px 60px 110px 60px;
+  height: 70vh;
+}
+
+/* Left Section */
+.left-section {
+  width: 50%;
+  padding-left: 100px;
+}
+
+.project-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: #2C3E50;
+}
+
+.tagline {
+  font-size: 24px;
+  color: #2C3E50;
+}
+
+.highlight {
+  color: #964ae2; /* Bright Blue */
+}
+
+.description {
+  font-size: 18px;
+  color: #555;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+/* ✅ Learn More Button (Underline Removed) */
+.learn-more {
+  background-color: #964ae2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  border-radius: 5px;
+  text-decoration: none; /* Removes underline */
+  display: inline-block; /* Ensures proper clickable behavior */
+}
+
+.learn-more:hover {
+  background-color: #9035d5;
+}
+
+/* Right Section (Image) */
+.right-section {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-image {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ✅ Responsive Styles */
+
+/* Large Screens (1000px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .homepage {
+    padding: 40px;
+  }
+  .left-section {
+    width: 45%;
+  }
+  .right-section {
+    width: 50%;
+  }
+}
+
+/* Medium Screens (800px - 1000px) → **Still Side-by-Side** */
+@media screen and (max-width: 1000px) {
+  .homepage {
+    padding: 30px;
+  }
+  .left-section {
+    width: 50%;
+    padding-left: 50px;
+  }
+  .right-section {
+    width: 50%;
+    justify-content: center;
+  }
+}
+
+/* Small Screens (Below 800px) → **Stack Sections Vertically** */
+@media screen and (max-width: 800px) {
+  .homepage {
+    flex-direction: column; /* Stacks left & right sections */
+    text-align: center;
+    padding: 20px;
+  }
+
+  .left-section, .right-section {
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .home-image {
+    max-width: 350px;
+  }
+
+  .learn-more {
+    width: auto;
+    max-width: 200px;
+    margin: 10px auto;
+  }
+}
