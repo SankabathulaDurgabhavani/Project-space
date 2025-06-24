@@ -28,4 +28,5 @@ RUN npm install
 EXPOSE 5000
 
 # Start the backend server
+WORKDIR /app/server
 CMD ["npm", "start"]
