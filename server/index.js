@@ -1,3 +1,12 @@
+const path = require('path');
+
+// Serve static files from React
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Fallback for React routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 require('dotenv').config();
 const axios = require("axios");
 const express = require("express");
