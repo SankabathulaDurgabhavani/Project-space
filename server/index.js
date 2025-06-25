@@ -14,11 +14,11 @@ app.use(cors());
 mongoose.connect("mongodb://127.0.0.1:27017/Health");
 
 // ---------------------- Static Frontend ----------------------
-app.use(express.static(path.join(__dirname, 'client/dist')));
+app.use(express.static(path.join(__dirname, 'client','dist')));
 
 // Fallback for React Routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client','dist', 'index.html'));
 });
 
 // ---------------------- Mongoose Schemas ----------------------
