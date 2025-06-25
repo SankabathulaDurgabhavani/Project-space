@@ -2,7 +2,7 @@ const path = require('path');
 const express = require("express");
 const app = express(); // ✅ declare first
 const axios = require("axios");
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const cors = require("cors");
 require('dotenv').config();
 
@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 // ---------------------- MongoDB ----------------------
-mongoose.connect("mongodb://127.0.0.1:27017/Health");
+// mongoose.connect("mongodb://127.0.0.1:27017/Health");
 
 // ---------------------- Static Frontend ----------------------
 app.use(express.static(path.join(__dirname, 'client','dist')));
@@ -22,48 +22,48 @@ app.get('*', (req, res) => {
 });
 
 // ---------------------- Mongoose Schemas ----------------------
-const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String
-});
+// const userSchema = new mongoose.Schema({
+//     name: String,
+//     email: String,
+//     password: String
+// });
 
-const healthSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    phone: String,
-    email: String,
-    bloodGroup: String,
-    age: Number,
-    gender: String,
-    height: Number,
-    weight: Number,
-    healthHistory: String,
-    allergies: String,
-    emergencyContacts: [String]
-});
+// const healthSchema = new mongoose.Schema({
+//     firstName: String,
+//     lastName: String,
+//     phone: String,
+//     email: String,
+//     bloodGroup: String,
+//     age: Number,
+//     gender: String,
+//     height: Number,
+//     weight: Number,
+//     healthHistory: String,
+//     allergies: String,
+//     emergencyContacts: [String]
+// });
 
-const fitbitTokenSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    access_token: String,
-    refresh_token: String,
-    user_id: String,
-    expires_at: Number
-});
+// const fitbitTokenSchema = new mongoose.Schema({
+//     email: { type: String, required: true, unique: true },
+//     access_token: String,
+//     refresh_token: String,
+//     user_id: String,
+//     expires_at: Number
+// });
 
-const fitbitDataSchema = new mongoose.Schema({
-    email: { type: String, required: true },
-    heartRate: Number,
-    steps: Number,
-    calories: Number,
-    sleepMinutes: Number,
-    timestamp: { type: Date, default: Date.now }
-});
+// const fitbitDataSchema = new mongoose.Schema({
+//     email: { type: String, required: true },
+//     heartRate: Number,
+//     steps: Number,
+//     calories: Number,
+//     sleepMinutes: Number,
+//     timestamp: { type: Date, default: Date.now }
+// });
 
-const User = mongoose.model("User", userSchema);
-const HealthRecord = mongoose.model("HealthRecord", healthSchema);
-const FitbitToken = mongoose.model("FitbitToken", fitbitTokenSchema);
-const FitbitHealth = mongoose.model("FitbitHealth", fitbitDataSchema);
+// const User = mongoose.model("User", userSchema);
+// const HealthRecord = mongoose.model("HealthRecord", healthSchema);
+// const FitbitToken = mongoose.model("FitbitToken", fitbitTokenSchema);
+// const FitbitHealth = mongoose.model("FitbitHealth", fitbitDataSchema);
 
 // ---------------------- Routes ----------------------
 
