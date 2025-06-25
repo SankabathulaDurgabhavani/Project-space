@@ -1,11 +1,11 @@
 const express = require("express");
+const app = express(); // ✅ declare first
 const path = require('path');
 const axios = require("axios");
 const mongoose = require('mongoose');
 const cors = require("cors");
 require('dotenv').config();
 
-const app = express(); // ✅ declare first
 
 app.use(express.json());
 app.use(cors());
