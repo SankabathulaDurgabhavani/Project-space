@@ -1,216 +1,228 @@
-const path = require('path');
 const express = require("express");
-const app = express(); // ✅ declare first
-const axios = require("axios");
-// const mongoose = require('mongoose');
 const cors = require("cors");
-require('dotenv').config();
+const path = require("path");
 
-
+const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ---------------------- MongoDB ----------------------
-// mongoose.connect("mongodb://127.0.0.1:27017/Health");
+// ✅ Serve static frontend (if available)
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
-// ---------------------- Static Frontend ----------------------
-app.use(express.static(path.join(__dirname, 'client','dist')));
-
-// Fallback for React Routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client','dist', 'index.html'));
+// ✅ Basic API route for testing
+app.get("/api/health", (req, res) => {
+  res.json({ status: "App Runner backend is working ✅" });
 });
 
-// ---------------------- Mongoose Schemas ----------------------
-// const userSchema = new mongoose.Schema({
-//     name: String,
-//     email: String,
-//     password: String
+// ✅ Fallback for React frontend routing
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
+
+// ✅ Start server on required port
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
+
+
+
+
+
+
+
+
+
+
+
+// const path = require('path');
+// const express = require("express");
+// const app = express(); // ✅ declare first
+// const axios = require("axios");
+// // const mongoose = require('mongoose');
+// const cors = require("cors");
+// require('dotenv').config();
+
+
+// app.use(express.json());
+// app.use(cors());
+
+// // ---------------------- MongoDB ----------------------
+// // mongoose.connect("mongodb://127.0.0.1:27017/Health");
+
+// // ---------------------- Static Frontend ----------------------
+// app.use(express.static(path.join(__dirname, 'client','dist')));
+
+// // Fallback for React Routing
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'client','dist', 'index.html'));
 // });
 
-// const healthSchema = new mongoose.Schema({
-//     firstName: String,
-//     lastName: String,
-//     phone: String,
-//     email: String,
-//     bloodGroup: String,
-//     age: Number,
-//     gender: String,
-//     height: Number,
-//     weight: Number,
-//     healthHistory: String,
-//     allergies: String,
-//     emergencyContacts: [String]
+// // ---------------------- Mongoose Schemas ----------------------
+// // const userSchema = new mongoose.Schema({
+// //     name: String,
+// //     email: String,
+// //     password: String
+// // });
+
+// // const healthSchema = new mongoose.Schema({
+// //     firstName: String,
+// //     lastName: String,
+// //     phone: String,
+// //     email: String,
+// //     bloodGroup: String,
+// //     age: Number,
+// //     gender: String,
+// //     height: Number,
+// //     weight: Number,
+// //     healthHistory: String,
+// //     allergies: String,
+// //     emergencyContacts: [String]
+// // });
+
+// // const fitbitTokenSchema = new mongoose.Schema({
+// //     email: { type: String, required: true, unique: true },
+// //     access_token: String,
+// //     refresh_token: String,
+// //     user_id: String,
+// //     expires_at: Number
+// // });
+
+// // const fitbitDataSchema = new mongoose.Schema({
+// //     email: { type: String, required: true },
+// //     heartRate: Number,
+// //     steps: Number,
+// //     calories: Number,
+// //     sleepMinutes: Number,
+// //     timestamp: { type: Date, default: Date.now }
+// // });
+
+// // const User = mongoose.model("User", userSchema);
+// // const HealthRecord = mongoose.model("HealthRecord", healthSchema);
+// // const FitbitToken = mongoose.model("FitbitToken", fitbitTokenSchema);
+// // const FitbitHealth = mongoose.model("FitbitHealth", fitbitDataSchema);
+
+// // ---------------------- Routes ----------------------
+
+// // ✅ Register health data
+// app.post("/register-health", async (req, res) => {
+//     try {
+//         const newHealth = new HealthRecord(req.body);
+//         await newHealth.save();
+//         res.json({ message: "Health details saved successfully" });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: "Error saving health data" });
+//     }
 // });
 
-// const fitbitTokenSchema = new mongoose.Schema({
-//     email: { type: String, required: true, unique: true },
-//     access_token: String,
-//     refresh_token: String,
-//     user_id: String,
-//     expires_at: Number
+// // ✅ Signup
+// app.post("/signup", async (req, res) => {
+//     const { name, email, password } = req.body;
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) return res.json({ message: "User already exists" });
+
+//     const newUser = new User({ name, email, password });
+//     await newUser.save();
+//     res.json({ message: "User registered successfully" });
 // });
 
-// const fitbitDataSchema = new mongoose.Schema({
-//     email: { type: String, required: true },
-//     heartRate: Number,
-//     steps: Number,
-//     calories: Number,
-//     sleepMinutes: Number,
-//     timestamp: { type: Date, default: Date.now }
+// // ✅ Login
+// app.post("/login", async (req, res) => {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email });
+
+//     if (!user) return res.json({ message: "User not found" });
+//     if (user.password !== password) return res.json({ message: "Invalid password" });
+
+//     res.json({ message: "Login Successful" });
 // });
 
-// const User = mongoose.model("User", userSchema);
-// const HealthRecord = mongoose.model("HealthRecord", healthSchema);
-// const FitbitToken = mongoose.model("FitbitToken", fitbitTokenSchema);
-// const FitbitHealth = mongoose.model("FitbitHealth", fitbitDataSchema);
+// // ✅ Fitbit Auth Redirect
+// app.get("/api/fitbit/auth", (req, res) => {
+//     const scope = "profile activity heartrate sleep";
+//     const email = req.query.email;
 
-// ---------------------- Routes ----------------------
+//     const redirectURL = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${process.env.FITBIT_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.FITBIT_REDIRECT_URI)}&scope=${encodeURIComponent(scope)}&prompt=login&expires_in=604800&state=${encodeURIComponent(email)}`;
 
-// ✅ Register health data
-app.post("/register-health", async (req, res) => {
-    try {
-        const newHealth = new HealthRecord(req.body);
-        await newHealth.save();
-        res.json({ message: "Health details saved successfully" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error saving health data" });
-    }
-});
+//     res.redirect(redirectURL);
+// });
 
-// ✅ Signup
-app.post("/signup", async (req, res) => {
-    const { name, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.json({ message: "User already exists" });
+// // ✅ Fitbit callback + store health data
+// app.get("/api/fitbit/callback", async (req, res) => {
+//     const { code, state } = req.query;
+//     const email = state;
 
-    const newUser = new User({ name, email, password });
-    await newUser.save();
-    res.json({ message: "User registered successfully" });
-});
+//     if (!email) return res.status(400).send("Email missing in callback");
 
-// ✅ Login
-app.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+//     const authHeader = Buffer.from(`${process.env.FITBIT_CLIENT_ID}:${process.env.FITBIT_CLIENT_SECRET}`).toString("base64");
 
-    if (!user) return res.json({ message: "User not found" });
-    if (user.password !== password) return res.json({ message: "Invalid password" });
+//     try {
+//         const tokenResponse = await axios.post("https://api.fitbit.com/oauth2/token",
+//             new URLSearchParams({
+//                 client_id: process.env.FITBIT_CLIENT_ID,
+//                 grant_type: "authorization_code",
+//                 redirect_uri: process.env.FITBIT_REDIRECT_URI,
+//                 code
+//             }),
+//             {
+//                 headers: {
+//                     "Authorization": `Basic ${authHeader}`,
+//                     "Content-Type": "application/x-www-form-urlencoded"
+//                 }
+//             }
+//         );
 
-    res.json({ message: "Login Successful" });
-});
+//         const { access_token, refresh_token, user_id, expires_in } = tokenResponse.data;
 
-// ✅ Fitbit Auth Redirect
-app.get("/api/fitbit/auth", (req, res) => {
-    const scope = "profile activity heartrate sleep";
-    const email = req.query.email;
+//         // Save tokens
+//         await FitbitToken.findOneAndUpdate(
+//             { email },
+//             {
+//                 access_token,
+//                 refresh_token,
+//                 user_id,
+//                 expires_at: Date.now() + expires_in * 1000
+//             },
+//             { upsert: true }
+//         );
 
-    const redirectURL = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${process.env.FITBIT_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.FITBIT_REDIRECT_URI)}&scope=${encodeURIComponent(scope)}&prompt=login&expires_in=604800&state=${encodeURIComponent(email)}`;
+//         // ✅ Fetch Fitbit health data
+//         const headers = { Authorization: `Bearer ${access_token}` };
+//         const today = new Date().toISOString().split("T")[0];
 
-    res.redirect(redirectURL);
-});
+//         const heartRateRes = await axios.get(`https://api.fitbit.com/1/user/-/activities/heart/date/${today}/1d.json`, { headers });
+//         const heartRate = heartRateRes.data["activities-heart"]?.[0]?.value?.restingHeartRate || 0;
 
-// ✅ Fitbit callback + store health data
-app.get("/api/fitbit/callback", async (req, res) => {
-    const { code, state } = req.query;
-    const email = state;
+//         const stepsRes = await axios.get(`https://api.fitbit.com/1/user/-/activities/steps/date/${today}/1d.json`, { headers });
+//         const steps = parseInt(stepsRes.data["activities-steps"]?.[0]?.value || 0);
 
-    if (!email) return res.status(400).send("Email missing in callback");
+//         const caloriesRes = await axios.get(`https://api.fitbit.com/1/user/-/activities/calories/date/${today}/1d.json`, { headers });
+//         const calories = parseInt(caloriesRes.data["activities-calories"]?.[0]?.value || 0);
 
-    const authHeader = Buffer.from(`${process.env.FITBIT_CLIENT_ID}:${process.env.FITBIT_CLIENT_SECRET}`).toString("base64");
+//         const sleepRes = await axios.get(`https://api.fitbit.com/1.2/user/-/sleep/date/${today}.json`, { headers });
+//         const sleepMinutes = sleepRes.data.summary?.totalMinutesAsleep || 0;
 
-    try {
-        const tokenResponse = await axios.post("https://api.fitbit.com/oauth2/token",
-            new URLSearchParams({
-                client_id: process.env.FITBIT_CLIENT_ID,
-                grant_type: "authorization_code",
-                redirect_uri: process.env.FITBIT_REDIRECT_URI,
-                code
-            }),
-            {
-                headers: {
-                    "Authorization": `Basic ${authHeader}`,
-                    "Content-Type": "application/x-www-form-urlencoded"
-                }
-            }
-        );
+//         await FitbitHealth.create({
+//             email,
+//             heartRate,
+//             steps,
+//             calories,
+//             sleepMinutes
+//         });
 
-        const { access_token, refresh_token, user_id, expires_in } = tokenResponse.data;
+//         console.log(`✅ Stored Fitbit health data for ${email}`);
+//         res.redirect(`http://localhost:5173/register-health?fromFitbit=true&user=${user_id}`);
+//     } catch (error) {
+//         console.error("Fitbit callback error:", error?.response?.data || error.message);
+//         res.status(500).send("Fitbit Authentication Failed");
+//     }
+// });
 
-        // Save tokens
-        await FitbitToken.findOneAndUpdate(
-            { email },
-            {
-                access_token,
-                refresh_token,
-                user_id,
-                expires_at: Date.now() + expires_in * 1000
-            },
-            { upsert: true }
-        );
-
-        // ✅ Fetch Fitbit health data
-        const headers = { Authorization: `Bearer ${access_token}` };
-        const today = new Date().toISOString().split("T")[0];
-
-        const heartRateRes = await axios.get(`https://api.fitbit.com/1/user/-/activities/heart/date/${today}/1d.json`, { headers });
-        const heartRate = heartRateRes.data["activities-heart"]?.[0]?.value?.restingHeartRate || 0;
-
-        const stepsRes = await axios.get(`https://api.fitbit.com/1/user/-/activities/steps/date/${today}/1d.json`, { headers });
-        const steps = parseInt(stepsRes.data["activities-steps"]?.[0]?.value || 0);
-
-        const caloriesRes = await axios.get(`https://api.fitbit.com/1/user/-/activities/calories/date/${today}/1d.json`, { headers });
-        const calories = parseInt(caloriesRes.data["activities-calories"]?.[0]?.value || 0);
-
-        const sleepRes = await axios.get(`https://api.fitbit.com/1.2/user/-/sleep/date/${today}.json`, { headers });
-        const sleepMinutes = sleepRes.data.summary?.totalMinutesAsleep || 0;
-
-        await FitbitHealth.create({
-            email,
-            heartRate,
-            steps,
-            calories,
-            sleepMinutes
-        });
-
-        console.log(`✅ Stored Fitbit health data for ${email}`);
-        res.redirect(`http://localhost:5173/register-health?fromFitbit=true&user=${user_id}`);
-    } catch (error) {
-        console.error("Fitbit callback error:", error?.response?.data || error.message);
-        res.status(500).send("Fitbit Authentication Failed");
-    }
-});
-
-// ---------------------- Start Server ----------------------
-app.listen(5000, '0.0.0.0', () => {
-    console.log("Server is running on port 5000");
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// // ---------------------- Start Server ----------------------
+// app.listen(5000, '0.0.0.0', () => {
+//     console.log("Server is running on port 5000");
+// });
 
 // const path = require('path');
 
